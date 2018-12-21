@@ -33,14 +33,12 @@ const AppInner = styled.div`
   }
 `
 
-const App: FunctionComponent = () => {
-  return (
+const App: FunctionComponent = () => (
     <AppInner className="App">
       <main>
         <DebugController/>
       </main>
     </AppInner>
-  );
-}
+)
 
 export default App;

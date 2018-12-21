@@ -1,0 +1,21 @@
+export enum GuitarButtons {
+  GREEN_FRET = 1,
+  RED_FRET = 2,
+  YELLOW_FRET = 0,
+  BLUE_FRET = 3,
+  ORANGE_FRET = 4,
+
+  STARPOWER = 8,
+  START = 9,
+  HOME = 12
+}
+
+export enum GuitarAxes {
+  MEDIATOR_AXE = 9
+}
+
+export const GUITAR_VARIABLES = {
+  MEDIATOR_UP: -1,
+  MEDIATOR_NEUTRAL: 3.2857141494750977,
+  MEDIATOR_DOWN: 0.14285719394683838
+}

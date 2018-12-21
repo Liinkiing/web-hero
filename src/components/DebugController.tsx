@@ -1,21 +1,20 @@
 import React, {FunctionComponent} from 'react';
-import {useGamepads, useRaf} from "../utils/hooks";
+import {observer} from "mobx-react-lite";
+import gameStore from "../store/GameStore";
+import {useRaf} from "../utils/hooks";
 
 const DebugController: FunctionComponent = () => {
-  const elapsed = useRaf()
-  const guitar = useGamepads().find(gamepad => /(guitar)|(hero)/i.test(gamepad.id))
-  if (!guitar) {
-    return null
-  }
+  useRaf()
+  const { guitarInput } = gameStore
 
   return (
     <div>
       <h1>Debug controller </h1>
-      {guitar.buttons.map((button, index) =>
-        <div key={index}>{button.pressed ? 'pressé' : 'non pressé'}</div>
-      )}
+      {guitarInput.pressedButtons.map(button => <div key={button}>{button}</div>)}
     </div>
   );
 }
 
-export default DebugController;
+export default observer(
+  DebugController
+);

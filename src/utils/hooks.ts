@@ -2,7 +2,6 @@ import {useEffect, useState, useLayoutEffect} from "react"
 import {List} from "./extensions"
 
 export const useGamepads = (): List<Gamepad> => {
-  console.log('call use gamepads')
   const [gamepads, setGamepads] = useState<List<Gamepad>>(new List<Gamepad>())
   useEffect(() => {
     const listener = () => {
