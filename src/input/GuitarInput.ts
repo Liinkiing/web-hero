@@ -1,9 +1,11 @@
 import {List} from "../utils/extensions";
 import {EventEmitter} from "events";
 import {GUITAR_VARIABLES, GuitarAxes, GuitarButtons} from "./bindings";
+import {Fret} from "../utils/interfaces";
 
-enum GuitarEvents {
+export enum GuitarEvents {
   Strum = 'strum',
+  StrumRelease = 'strum_release',
   StrumUp = 'strum_up',
   StrumDown = 'strum_down'
 }
@@ -27,8 +29,8 @@ export default class GuitarInput extends EventEmitter {
     return super.addListener(event, listener);
   }
 
-  public on = (event: GuitarEvents, listener: (...args: any[]) => void): this => {
-    return super.on(event, listener);
+  removeListener(event: GuitarEvents, listener: (...args: any[]) => void): this {
+    return super.removeListener(event, listener);
   }
 
   public once = (event: GuitarEvents, listener: (...args: any[]) => void): this => {
@@ -44,6 +46,22 @@ export default class GuitarInput extends EventEmitter {
     return this._guitar.buttons
       .filter(button => button.pressed)
       .map(button => GuitarButtons[this._guitar!.buttons.indexOf(button)])
+  }
+
+  public get pressedFrets(): Fret[] {
+    if (!this._guitar) return []
+
+    const fretsButton: number[] = [
+      GuitarButtons.GREEN_FRET,
+      GuitarButtons.RED_FRET,
+      GuitarButtons.YELLOW_FRET,
+      GuitarButtons.BLUE_FRET,
+      GuitarButtons.ORANGE_FRET
+    ]
+
+    return this._guitar.buttons
+      .filter((button, index) => button.pressed && fretsButton.includes(index))
+      .map(button => GuitarButtons[this._guitar!.buttons.indexOf(button)]) as Fret[]
   }
 
   private retrieveGuitarGamepad = (): Gamepad | undefined => {
@@ -69,16 +87,16 @@ export default class GuitarInput extends EventEmitter {
 
   private handleStrums = () => {
     if (this._guitar!.axes[GuitarAxes.MEDIATOR_AXE] === GUITAR_VARIABLES.MEDIATOR_UP && !this._flags.strummed) {
-      console.log('emitted ' + GuitarEvents.StrumUp)
+      this.emit(GuitarEvents.Strum)
       this.emit(GuitarEvents.StrumUp)
       this._flags.strummed = true
     }
     if (this._guitar!.axes[GuitarAxes.MEDIATOR_AXE] === GUITAR_VARIABLES.MEDIATOR_NEUTRAL && this._flags.strummed) {
-      console.log('stopped strum')
+      this.emit(GuitarEvents.StrumRelease)
       this._flags.strummed = false
     }
     if (this._guitar!.axes[GuitarAxes.MEDIATOR_AXE] === GUITAR_VARIABLES.MEDIATOR_DOWN && !this._flags.strummed) {
-      console.log('emitted ' + GuitarEvents.StrumDown)
+      this.emit(GuitarEvents.Strum)
       this.emit(GuitarEvents.StrumDown)
       this._flags.strummed = true
     }

@@ -2,8 +2,9 @@
   "compilerOptions": {
     "outDir": "build/dist",
     "module": "esnext",
-    "target": "es5",
+    "target": "esnext",
     "lib": [
+      "es7",
       "es6",
       "dom"
     ],
