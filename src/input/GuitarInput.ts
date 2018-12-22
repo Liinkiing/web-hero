@@ -48,8 +48,8 @@ export default class GuitarInput extends EventEmitter {
       .map(button => GuitarButtons[this._guitar!.buttons.indexOf(button)])
   }
 
-  public get pressedFrets(): Fret[] {
-    if (!this._guitar) return []
+  public get pressedFrets(): List<Fret> {
+    if (!this._guitar) return new List<Fret>()
 
     const fretsButton: number[] = [
       GuitarButtons.GREEN_FRET,
@@ -59,9 +59,10 @@ export default class GuitarInput extends EventEmitter {
       GuitarButtons.ORANGE_FRET
     ]
 
-    return this._guitar.buttons
+    return new List<Fret>(this._guitar.buttons
       .filter((button, index) => button.pressed && fretsButton.includes(index))
       .map(button => GuitarButtons[this._guitar!.buttons.indexOf(button)]) as Fret[]
+    )
   }
 
   private retrieveGuitarGamepad = (): Gamepad | undefined => {

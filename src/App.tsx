@@ -1,11 +1,18 @@
 import React, {FunctionComponent} from 'react';
 import styled from "styled-components";
 import DebugController from "./components/DebugController";
+import {useRaf} from "./utils/hooks";
+import gameStore from "./store/GameStore";
 
-const AppInner = styled.div`
+interface StyledProps {
+  background: string,
+}
 
+const AppInner = styled.div<StyledProps>`
+  
+  transition: all 0.1s;
   text-align: center;
-  background-color: #282c34;
+  background-color: ${(props: StyledProps) => props.background};
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -33,12 +40,16 @@ const AppInner = styled.div`
   }
 `
 
-const App: FunctionComponent = () => (
-    <AppInner className="App">
+const App: FunctionComponent = () => {
+  useRaf()
+  const background = gameStore.backgroundColor
+  return (
+    <AppInner className="App" background={background}>
       <main>
         <DebugController/>
       </main>
     </AppInner>
-)
+  );
+}
 
 export default App;

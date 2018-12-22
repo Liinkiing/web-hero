@@ -8,6 +8,10 @@ body {
   sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  &.strumming .App {
+    background: whitesmoke;
+    color: black;
+  }
 }
 
 code {

@@ -4,13 +4,14 @@ import styled, {css} from "styled-components";
 import {show} from "../../styles/keyframes";
 import {GuitarEvents} from "../../input/GuitarInput";
 import {useGuitarEvent} from "../../utils/hooks";
+import {wait} from "../../utils/promises";
 
 interface Props {
   fret: Fret,
   show: boolean
 }
 
-const mapFretToColor = (fret: Fret, opacity: number = 1): string => {
+export const mapFretToColor = (fret: Fret, opacity: number = 1): string => {
   switch (fret) {
     case "GREEN_FRET":
       return `rgba(0,255,0,${String(opacity)})`
@@ -42,14 +43,20 @@ const FretButtonInner = styled.div<Props>`
 const FretButton: FunctionComponent<Props> = (props) => {
   const { fret, show } = props
   const ref = useRef<HTMLDivElement>(null)
-  useGuitarEvent(GuitarEvents.Strum, () => {
+  useGuitarEvent(GuitarEvents.Strum, async () => {
     if (!show || !ref.current) return;
     ref.current.classList.add('strumming')
+    document.body.classList.add('strumming')
+    await wait(150)
+    ref.current.classList.remove('strumming')
+    document.body.classList.remove('strumming')
+
   }, [show])
 
   useGuitarEvent(GuitarEvents.StrumRelease, () => {
     if (!show || !ref.current) return;
     ref.current.classList.remove('strumming')
+    document.body.classList.remove('strumming')
   }, [show])
 
   return (
