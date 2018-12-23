@@ -4,6 +4,13 @@
     "object-literal-sort-keys": false,
     "ordered-imports": false,
     "interface-name": false,
+    "semicolon": false,
+    "arrow-parens": false,
+    "no-shadowed-variable": false,
+    "trailing-comma": false,
+    "quotemark": {
+      "options": ["single", "jsx-double"]
+    },
     "no-debugger": {
       "severity": "warning"
     },

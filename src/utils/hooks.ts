@@ -21,7 +21,7 @@ export const useGamepads = (): List<Gamepad> => {
   return new List<Gamepad>(gamepads.filter(Boolean)! as Gamepad[])
 }
 
-export const useGuitarEvent = (event: GuitarEvents, listener: () => void, inputs?: InputIdentityList) => {
+export const useGuitarEvent = (event: GuitarEvents, listener: (...args: any[]) => void, inputs?: InputIdentityList) => {
   const { guitarInput } = gameStore
 
   useEffect(() => {

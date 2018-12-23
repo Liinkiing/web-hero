@@ -1,7 +1,7 @@
-import {List} from "../utils/extensions";
-import {EventEmitter} from "events";
-import {GUITAR_VARIABLES, GuitarAxes, GuitarButtons} from "./bindings";
-import {Fret} from "../utils/interfaces";
+import {List} from '../utils/extensions';
+import {EventEmitter} from 'events';
+import {GUITAR_VARIABLES, GuitarAxes, GuitarButtons} from './bindings';
+import {Fret} from '../utils/interfaces';
 
 export enum GuitarEvents {
   Strum = 'strum',
@@ -20,8 +20,8 @@ export default class GuitarInput extends EventEmitter {
 
   constructor() {
     super()
-    window.addEventListener("gamepadconnected", this.updateGamepad)
-    window.addEventListener("gamepaddisconnected", this.updateGamepad)
+    window.addEventListener('gamepadconnected', this.updateGamepad)
+    window.addEventListener('gamepaddisconnected', this.updateGamepad)
     this._elapsed = requestAnimationFrame(this.update)
   }
 
@@ -29,7 +29,7 @@ export default class GuitarInput extends EventEmitter {
     return super.addListener(event, listener);
   }
 
-  removeListener(event: GuitarEvents, listener: (...args: any[]) => void): this {
+  public removeListener = (event: GuitarEvents, listener: (...args: any[]) => void): this => {
     return super.removeListener(event, listener);
   }
 
@@ -42,14 +42,18 @@ export default class GuitarInput extends EventEmitter {
   }
 
   public get pressedButtons(): string[] {
-    if (!this._guitar) return []
+    if (!this._guitar) {
+      return []
+    }
     return this._guitar.buttons
       .filter(button => button.pressed)
       .map(button => GuitarButtons[this._guitar!.buttons.indexOf(button)])
   }
 
   public get pressedFrets(): List<Fret> {
-    if (!this._guitar) return new List<Fret>()
+    if (!this._guitar) {
+      return new List<Fret>()
+    }
 
     const fretsButton: number[] = [
       GuitarButtons.GREEN_FRET,
@@ -88,8 +92,8 @@ export default class GuitarInput extends EventEmitter {
 
   private handleStrums = () => {
     if (this._guitar!.axes[GuitarAxes.MEDIATOR_AXE] === GUITAR_VARIABLES.MEDIATOR_UP && !this._flags.strummed) {
-      this.emit(GuitarEvents.Strum)
-      this.emit(GuitarEvents.StrumUp)
+      this.emit(GuitarEvents.Strum, this.pressedFrets)
+      this.emit(GuitarEvents.StrumUp, this.pressedFrets)
       this._flags.strummed = true
     }
     if (this._guitar!.axes[GuitarAxes.MEDIATOR_AXE] === GUITAR_VARIABLES.MEDIATOR_NEUTRAL && this._flags.strummed) {
@@ -97,8 +101,8 @@ export default class GuitarInput extends EventEmitter {
       this._flags.strummed = false
     }
     if (this._guitar!.axes[GuitarAxes.MEDIATOR_AXE] === GUITAR_VARIABLES.MEDIATOR_DOWN && !this._flags.strummed) {
-      this.emit(GuitarEvents.Strum)
-      this.emit(GuitarEvents.StrumDown)
+      this.emit(GuitarEvents.Strum, this.pressedFrets)
+      this.emit(GuitarEvents.StrumDown, this.pressedFrets)
       this._flags.strummed = true
     }
   }

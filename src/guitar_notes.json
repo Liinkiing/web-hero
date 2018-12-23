@@ -1,0 +1,17 @@
+{
+  "GREEN_FRET": {
+    "offset": 0
+  },
+  "RED_FRET": {
+    "offset": 3.69
+  },
+  "YELLOW_FRET": {
+    "offset": 7.38
+  },
+  "BLUE_FRET": {
+    "offset": 11.07
+  },
+  "ORANGE_FRET": {
+    "offset": 14.76
+  }
+}
